@@ -33,8 +33,6 @@ spec:
               fieldPath: status.podIP
         - name: AKKA_ACTOR_SYSTEM_NAME
           value: sharding-sample
-        - name: AKKA_REMOTING_LOGICAL_HOST
-          value: "$(POD_IP)"
         - name: AKKA_REMOTING_BIND_HOST
           value: "$(POD_IP)"
         - name: AKKA_REMOTING_BIND_PORT

@@ -38,18 +38,16 @@ spec:
           value: sharding-sample
         - name: AKKA_REMOTING_BIND_PORT
           value: '2551'
-        - name: AKKA_REMOTING_LOGICAL_HOST # The name that other pods can look up this pod with
-          value: "$(POD_NAME).seeds-remoting"
-        - name: AKKA_REMOTING_BIND_HOST    # The internal host name of this pod
-          value: "$(POD_NAME)"
+        - name: AKKA_REMOTING_BIND_HOST
+          value: "$(POD_NAME).seeds-remoting.default.svc.cluster.local"
         - name: AKKA_SEED_NODE_PORT
           value: '2551'
         - name: AKKA_SEED_NODE_HOST_0
-          value: sharding-sample-seeds-0.seeds-remoting
+          value: sharding-sample-seeds-0.seeds-remoting.default.svc.cluster.local
         - name: AKKA_SEED_NODE_HOST_1
-          value: sharding-sample-seeds-1.seeds-remoting
+          value: sharding-sample-seeds-1.seeds-remoting.default.svc.cluster.local
         - name: AKKA_SEED_NODE_HOST_2
-          value: sharding-sample-seeds-2.seeds-remoting
+          value: sharding-sample-seeds-2.seeds-remoting.default.svc.cluster.local
         - name: SAMPLE_HTTP_PORT
           value: '8080'
         - name: SAMPLE_HTTP_HOST

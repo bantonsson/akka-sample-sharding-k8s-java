@@ -25,10 +25,8 @@ val `akka-sample-sharding-k8s-java` = project
     // These values will be filled in by the k8s StatefulSet and Deployment
     dockerEntrypoint ++= Seq(
       """-DactorSystemName="$AKKA_ACTOR_SYSTEM_NAME"""",
-      """-Dakka.remote.netty.tcp.hostname="$AKKA_REMOTING_LOGICAL_HOST"""",
+      """-Dakka.remote.netty.tcp.hostname="$AKKA_REMOTING_BIND_HOST"""",
       """-Dakka.remote.netty.tcp.port="$AKKA_REMOTING_BIND_PORT"""",
-      """-Dakka.remote.netty.tcp.bind-hostname="$AKKA_REMOTING_BIND_HOST"""",
-      """-Dakka.remote.netty.tcp.bind-port="$AKKA_REMOTING_BIND_PORT"""",
       """-Dakka.cluster.seed-nodes.0="akka.tcp://${AKKA_ACTOR_SYSTEM_NAME}@${AKKA_SEED_NODE_HOST_0}:${AKKA_SEED_NODE_PORT}"""",
       """-Dakka.cluster.seed-nodes.1="akka.tcp://${AKKA_ACTOR_SYSTEM_NAME}@${AKKA_SEED_NODE_HOST_1}:${AKKA_SEED_NODE_PORT}"""",
       """-Dakka.cluster.seed-nodes.2="akka.tcp://${AKKA_ACTOR_SYSTEM_NAME}@${AKKA_SEED_NODE_HOST_2}:${AKKA_SEED_NODE_PORT}"""",

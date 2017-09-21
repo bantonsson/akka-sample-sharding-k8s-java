@@ -1,0 +1,61 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: sharding-sample-seeds
+spec:
+  serviceName: seeds-remoting
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sharding-sample
+        type: sharding-sample-seed
+    spec:
+      containers:
+      - name: sharding-sample
+        image: samplegroup/akka-sample-sharding-k8s-java
+        imagePullPolicy: Never # Only use the local image
+        ports:
+        - containerPort: 8080  # The kubectl proxy will default to the first port in the list
+          name: akka-http
+          protocol: TCP
+        - containerPort: 2551
+          name: akka-remote
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 250m
+            memory: 384Mi
+          requests:
+            cpu: 250m
+            memory: 384Mi
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: AKKA_ACTOR_SYSTEM_NAME
+          value: sharding-sample
+        - name: AKKA_REMOTING_BIND_PORT
+          value: '2551'
+        - name: AKKA_REMOTING_LOGICAL_HOST # The name that other pods can look up this pod with
+          value: "$(POD_NAME).seeds-remoting"
+        - name: AKKA_REMOTING_BIND_HOST    # The internal host name of this pod
+          value: "$(POD_NAME)"
+        - name: AKKA_SEED_NODE_PORT
+          value: '2551'
+        - name: AKKA_SEED_NODE_HOST_0
+          value: sharding-sample-seeds-0.seeds-remoting
+        - name: AKKA_SEED_NODE_HOST_1
+          value: sharding-sample-seeds-1.seeds-remoting
+        - name: AKKA_SEED_NODE_HOST_2
+          value: sharding-sample-seeds-2.seeds-remoting
+        - name: SAMPLE_HTTP_PORT
+          value: '8080'
+        - name: SAMPLE_HTTP_HOST
+          value: "$(POD_NAME)"
+        readinessProbe:
+          tcpSocket:
+            port: 2551
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
